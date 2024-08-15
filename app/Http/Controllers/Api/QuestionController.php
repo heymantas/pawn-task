@@ -13,7 +13,7 @@ class QuestionController extends Controller
         $questions = Question::with('options')->get();
         return response()->json(
             [
-                'message' => 'success',
+                'status' => 'success',
                 'questions' => $questions
             ],
         );
