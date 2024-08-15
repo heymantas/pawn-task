@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\QuestionController;
+use App\Http\Middleware\APIAuthentication;
 use Illuminate\Support\Facades\Route;
 
 
@@ -9,3 +11,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::group(['middleware' => APIAuthentication::class], function () {
+    //Profiling questions
+    Route::get('/get-questions', [QuestionController::class, 'getQuestions']);
+
+});

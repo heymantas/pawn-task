@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 
@@ -16,7 +15,6 @@ class AuthController extends Controller
 
     public function logout(): JsonResponse
     {
-
         $user = auth('sanctum')->user();
 
         try {
@@ -26,7 +24,6 @@ class AuthController extends Controller
                 'message' => 'Successfully logged out',
             ]);
         } catch (\Exception $e) {
-
             Log::error('Logout Failed', ['error' => $e->getMessage()]);
 
             return response()->json([
@@ -35,6 +32,7 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
     public function login(AuthRequest $request, UserService $userService): JsonResponse
     {
         try {
@@ -72,7 +70,6 @@ class AuthController extends Controller
                 'user' => new UserResource($user),
             ]);
         } catch (\Exception $e) {
-
             Log::error('User Registration Failed', ['error' => $e->getMessage()]);
 
             return response()->json([
