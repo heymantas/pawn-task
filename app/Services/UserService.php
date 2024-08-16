@@ -39,4 +39,12 @@ class UserService
         return null;
     }
 
+    public function convertPtsToUSD($userId, $points) {
+
+        $user = User::where('id', $userId)->firstOrFail();
+        $usdAmount = $points * 0.01;
+        $user->balance += $usdAmount;
+        $user->save();
+    }
+
 }
