@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\APIAuthentication;
+use App\Http\Middleware\UpdateUserProfileOnceAday;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,8 +24,10 @@ Route::group(['middleware' => APIAuthentication::class], function () {
     Route::get('/get-transactions', [TransactionController::class, 'getTransactions']);
 
     //Get user wallet
-
     Route::get('/get-user-wallet', [UserController::class, 'getUserWallet']);
 
-
+    Route::group(['middleware' => UpdateUserProfileOnceAday::class], function () {
+        //Update user profile
+        Route::post('/update-user-profile', [UserController::class, 'updateUserProfile']);
+    });
 });

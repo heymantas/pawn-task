@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class QuestionAnswers extends Model
+class QuestionAnswer extends Model
 {
     use HasFactory;
 
-    protected $table = 'option_answers';
+    protected $table = 'question_answers';
 }
