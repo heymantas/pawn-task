@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->decimal('balance', 10, 2)->default(0.00)->after('email');
+            $table->string('country');
+            $table->string('isocode');
+            $table->string('ip_address');
         });
     }
 
@@ -22,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('balance');
+            //
         });
     }
 };

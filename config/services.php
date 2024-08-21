@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'proxy_check_io_key' => env('PROXY_CHECK_IO_KEY'),
+    'proxy_check_io_api_url' => env('PROXY_CHECK_IO_API_URL', 'https://proxycheck.io/v2'),
+
 ];

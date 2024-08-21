@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserProfileRequest;
+use App\Http\Resources\UserWalletResource;
 use App\Models\QuestionAnswer;
 use App\Models\Transaction;
+use App\Models\UserWallet;
 use App\Services\TransactionService;
 use Carbon\Carbon;
 
@@ -12,25 +15,8 @@ class UserController extends Controller
 {
     public function getUserWallet()
     {
-        $user = auth('sanctum')->user();
-        $balance = $user->balance;
-
-        $unclaimedTransactions = Transaction::where('user_id', $user->id)
-            ->where('is_claimed', false)
-            ->selectRaw('COUNT(*) as count, SUM(points) as points')
-            ->first();
-
-        $unclaimedTransactionsCount = $unclaimedTransactions->count ?? 0;
-        $unclaimedPoints = $unclaimedTransactions->points ?? 0;
-
-        $pendingBalance = $unclaimedPoints * 0.01; // 1 point = 0.01 USD
-
-        return response()->json([
-            'status' => 'success',
-            'balance' => $balance,
-            'unclaimed_transactions_count' => $unclaimedTransactionsCount,
-            'pending_balance' => $pendingBalance,
-        ]);
+        $userWallet = UserWallet::where('user_id', auth('sanctum')->id())->firstOrFail();
+        return new UserWalletResource($userWallet);
     }
 
     public function updateUserProfile(UpdateUserProfileRequest $request)

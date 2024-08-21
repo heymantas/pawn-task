@@ -25,4 +25,20 @@ class UserResource extends JsonResource
             ],
         ];
     }
+
+    public function withResponse($request, $response)
+    {
+        /**
+         * Not all prerequisites were met.
+         */
+        $response->setStatusCode(200, '');
+    }
+
+    public function with($request)
+    {
+        return [
+            'status' => 'success'
+        ];
+    }
+
 }
