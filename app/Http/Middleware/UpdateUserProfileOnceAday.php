@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\FailedResource;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,16 +14,14 @@ class UpdateUserProfileOnceAday
      *
      * @param Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next): Response
+
+    public function handle(Request $request, Closure $next): FailedResource
     {
 
         $user = auth('sanctum')->user();
 
         if ($user->last_profile_update && $user->last_profile_update->isToday()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'You can only update your profile once a day.',
-            ], 403);
+            return new FailedResource(403, 'You can only update your profile once a day.');
         }
 
         return $next($request);

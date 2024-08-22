@@ -23,14 +23,14 @@ class UserService
         $ipAddress = '8.8.8.8';
         $countryData = $this->getUserCountryByIP($ipAddress);
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'isocode' => $countryData['isocode'],
-            'country' => $countryData['country'],
-            'ip_address' => $ipAddress,
-        ]);
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->isocode = $countryData['isocode'];
+        $user->country = $countryData['country'];
+        $user->ip_address = $ipAddress;
+        $user->save();
 
         (new UserWalletService())->createUserWallet($user->id);
 

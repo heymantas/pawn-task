@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClaimTransactionRequest;
 use App\Http\Resources\Collections\TransactionCollection;
+use App\Http\Resources\SuccessResource;
 use App\Models\Transaction;
 use App\Services\TransactionService;
 use App\Services\UserWalletService;
-use Illuminate\Http\JsonResponse;
 
 class TransactionController extends Controller
 {
@@ -19,7 +19,7 @@ class TransactionController extends Controller
         return new TransactionCollection($transactions);
     }
 
-    public function claimTransactions(ClaimTransactionRequest $request): JsonResponse
+    public function claimTransactions(ClaimTransactionRequest $request): SuccessResource
     {
         $user = auth('sanctum')->user();
 
@@ -31,9 +31,6 @@ class TransactionController extends Controller
         $totalPoints = ((new TransactionService()))->calculateAndSaveClaimedPoints($transactions);
         (new UserWalletService())->updateUserWallet($user->id, $totalPoints);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Transactions successfully claimed',
-        ]);
+        return new SuccessResource('Transactions successfully claimed');
     }
 }

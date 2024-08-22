@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\FailedResource;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,6 @@ class APIAuthentication
             return $next($request);
         }
 
-        return response()->json(['message' => 'Unauthorized.'], 401);
+        return new FailedResource(401, 'Unauthorized.');
     }
 }
