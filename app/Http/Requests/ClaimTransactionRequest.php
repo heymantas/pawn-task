@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\TransactionIsNotClaimed;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,7 +27,10 @@ class ClaimTransactionRequest extends FormRequest
     {
         return [
             'transaction_ids' => 'required|array',
-            'transaction_ids.*' => 'exists:transactions,id',
+            'transaction_ids.*' => [
+                'exists:transactions,id',
+                new TransactionIsNotClaimed(),
+            ],
         ];
     }
 

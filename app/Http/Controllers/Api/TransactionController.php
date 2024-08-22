@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClaimTransactionRequest;
 use App\Http\Resources\Collections\TransactionCollection;
 use App\Http\Resources\SuccessResource;
+use App\Mail\SuccessClaimTransaction;
 use App\Models\Transaction;
 use App\Services\TransactionService;
 use App\Services\UserWalletService;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -30,6 +32,8 @@ class TransactionController extends Controller
 
         $totalPoints = ((new TransactionService()))->calculateAndSaveClaimedPoints($transactions);
         (new UserWalletService())->updateUserWallet($user->id, $totalPoints);
+
+        Mail::to($user->email)->queue(new SuccessClaimTransaction($totalPoints));
 
         return new SuccessResource('Transactions successfully claimed');
     }
