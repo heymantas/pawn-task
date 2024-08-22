@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('country');
-            $table->string('isocode');
-            $table->string('ip_address');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->timestamp('claimed_at')->nullable();
         });
     }
 
@@ -23,10 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('country');
-            $table->dropColumn('isocode');
-            $table->dropColumn('ip_address');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropColumn('claimed_at');
         });
     }
 };

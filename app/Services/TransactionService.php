@@ -25,6 +25,7 @@ class TransactionService
         foreach ($transactions as $transaction) {
             $totalPoints += $transaction->points;
             $transaction->is_claimed = true;
+            $transaction->claimed_at = now();
             $transaction->save();
         }
         return $totalPoints;

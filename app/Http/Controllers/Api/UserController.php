@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use App\Models\UserWallet;
 use App\Services\QuestionAnswerService;
 use App\Services\TransactionService;
+use App\Services\UserWalletService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
@@ -28,6 +29,7 @@ class UserController extends Controller
 
         (new QuestionAnswerService())->saveQuestionAnswers($request['answers'], $user);
         (new TransactionService())->createTransaction($user->id, 5);
+        (new UserWalletService())->updateUserWallet($user->id);
 
         $user->last_profile_update = Carbon::now();
         $user->save();
