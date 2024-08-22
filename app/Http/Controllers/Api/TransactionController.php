@@ -4,24 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClaimTransactionRequest;
+use App\Http\Resources\Collections\TransactionCollection;
 use App\Models\Transaction;
+use App\Services\TransactionService;
 use App\Services\UserWalletService;
+use Illuminate\Http\JsonResponse;
 
 class TransactionController extends Controller
 {
-    public function getTransactions()
+    public function getTransactions(): TransactionCollection
     {
-        $transactions = Transaction::where('user_id', auth('sanctum')->user())
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        return response()->json([
-            'status' => 'success',
-            'transactions' => $transactions,
-        ]);
+        $user = auth('sanctum')->user();
+        $transactions = Transaction::where('user_id', $user->id)->orderBy('created_at', 'DESC')->get();
+        return new TransactionCollection($transactions);
     }
 
-    public function claimTransactions(ClaimTransactionRequest $request)
+    public function claimTransactions(ClaimTransactionRequest $request): JsonResponse
     {
         $user = auth('sanctum')->user();
 
@@ -30,14 +28,7 @@ class TransactionController extends Controller
             ->where('is_claimed', false)
             ->get();
 
-        $totalPoints = 0;
-
-        foreach ($transactions as $transaction) {
-            $totalPoints += $transaction->points;
-            $transaction->is_claimed = true;
-            $transaction->save();
-        }
-
+        $totalPoints = ((new TransactionService()))->calculateAndSaveClaimedPoints($transactions);
         (new UserWalletService())->updateUserWallet($user->id, $totalPoints);
 
         return response()->json([

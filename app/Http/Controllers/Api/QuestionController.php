@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Collections\QuestionCollection;
 use App\Models\Question;
-use Illuminate\Http\JsonResponse;
 
 class QuestionController extends Controller
 {
-    public function getQuestions(): JsonResponse
+    public function getQuestions(): QuestionCollection
     {
         $questions = Question::with('options')->get();
-        return response()->json(
-            [
-                'status' => 'success',
-                'questions' => $questions
-            ],
-        );
+        return new QuestionCollection($questions);
     }
 }

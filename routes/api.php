@@ -26,7 +26,7 @@ Route::group(['middleware' => [AlwaysAcceptJson::class, CheckIfVpn::class]], fun
         Route::get('/get-transactions', [TransactionController::class, 'getTransactions']);
 
         //Claim transaction
-        Route::post('/claim-transaction', [TransactionController::class, 'claimTransactions']);
+        Route::post('/claim-transactions', [TransactionController::class, 'claimTransactions']);
 
         //Get user wallet
         Route::get('/get-user-wallet', [UserController::class, 'getUserWallet']);

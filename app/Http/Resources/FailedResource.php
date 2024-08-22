@@ -16,19 +16,19 @@ class FailedResource extends JsonResource
         $this->message = $message;
     }
 
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
 
         ];
     }
 
-    public function withResponse($request, $response)
+    public function withResponse($request, $response): void
     {
         $response->setStatusCode($this->statusCode);
     }
 
-    public function with($request)
+    public function with($request): array
     {
         return [
             'status' => 'error',

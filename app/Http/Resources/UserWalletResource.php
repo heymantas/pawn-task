@@ -20,4 +20,19 @@ class UserWalletResource extends JsonResource
             'pendingBalance' => $this->pending_balance,
         ];
     }
+
+    public function withResponse($request, $response): void
+    {
+        /**
+         * Not all prerequisites were met.
+         */
+        $response->setStatusCode(200, '');
+    }
+
+    public function with($request): array
+    {
+        return [
+            'status' => 'success'
+        ];
+    }
 }

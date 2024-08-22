@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_wallet', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->decimal('balance', 15, 2)->default(0.00);
             $table->decimal('pending_balance', 15, 2)->default(0.00);
             $table->integer('unclaimed_transactions_count')->default(0);
