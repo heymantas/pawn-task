@@ -20,7 +20,8 @@ class TransactionIsNotClaimed implements ValidationRule
         $transaction = Transaction::find($value);
 
         // Check if the transaction exists and if it is claimed
-        if (!$transaction || $transaction->is_claimed) {
+
+        if($transaction && $transaction->is_claimed) {
             $fail('This transaction was already claimed previously.');
         }
     }

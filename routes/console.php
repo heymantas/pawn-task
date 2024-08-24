@@ -19,4 +19,4 @@ Artisan::command('save-daily-global-stats', function () {
     $stats->total_amount = $totalAmount;
     $stats->save();
 
-})->dailyAt('03:00');
+})->dailyAt('23:00');

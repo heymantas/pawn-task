@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Resources\FailedResource;
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,7 @@ class UpdateUserProfileOnceAday
      * @param Closure(Request): (Response) $next
      */
 
-    public function handle(Request $request, Closure $next): FailedResource
+    public function handle(Request $request, Closure $next): FailedResource|JsonResponse
     {
 
         $user = auth('sanctum')->user();
