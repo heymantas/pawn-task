@@ -20,3 +20,9 @@ Artisan::command('save-daily-global-stats', function () {
     $stats->save();
 
 })->dailyAt('23:00');
+
+if (config('app.env') === 'production') {
+    Artisan::command('test', function () {
+        throw new Exception("Can't test in production env.");
+    })->purpose("Should not run test in production environment, as it may clear the database.");
+}

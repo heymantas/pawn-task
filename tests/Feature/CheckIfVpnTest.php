@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 use App\Http\Middleware\CheckIfVpn;
 use App\Http\Resources\FailedResource;
@@ -14,24 +16,15 @@ class CheckIfVpnTest extends TestCase
 
     public function test_it_blocks_request_if_using_vpn()
     {
+        $vpnIpAddress = '185.214.96.77'; //Latvian VPN
 
-        $apiKey = config('services.proxy_check_io_key');
-        $apiUrl = config('services.proxy_check_io_api_url');
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
-        $vpnIpAddress = '185.214.96.77';
+        $response = $this->getJson('/api/get-questions?ip=' . $vpnIpAddress);
 
-        Http::fake([
-            "{$apiUrl}/{$vpnIpAddress}?key={$apiKey}&vpn=1" => Http::response([
-                'status' => 'ok',
-                $vpnIpAddress => ['proxy' => 'yes'],
-            ]),
-        ]);
+        $user->delete();
 
-        $response = $this->getJson('/api/test?ip=' . $vpnIpAddress);
-
-        $response->assertStatus(403)
-            ->assertJson([
-                'message' => 'Access denied due to VPN usage',
-            ]);
+        $response->assertStatus(403)->assertJson(['message' => 'Access denied due to VPN usage']);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Resources\FailedResource;
+use App\Services\UserService;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,22 +17,15 @@ class CheckIfVpn
      *
      * @param Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next): JsonResponse|FailedResource|Response
+    public function handle(Request $request, Closure $next): JsonResponse|FailedResource
     {
-        //IP address from the user
-        //$ipAddress = (new UserService())->getUserIPAddress();
-
-        //IP address for testing (VPN)
-        //$ipAddress = '185.214.96.77';
-
-        //IP address for testing (non VPN)
-
-        if(request()->has('ip')) {
+        if (config('app.env') === 'production') { //get actual IP address in production
+            $ipAddress = (new UserService())->getUserIPAddress();
+        } elseif (request()->has('ip')) { //used in PHPUnit testing
             $ipAddress = request('ip');
-        } else {
+        } else { //Dev environment
             $ipAddress = '8.8.8.8';
         }
-
 
         $apiKey = config('services.proxy_check_io_key');
         $apiUrl = config('services.proxy_check_io_api_url');
