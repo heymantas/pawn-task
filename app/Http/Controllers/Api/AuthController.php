@@ -20,13 +20,8 @@ class AuthController extends Controller
             return new FailedResource(401, 'No authenticated user found.');
         }
 
-        try {
-            $user->currentAccessToken()->delete();
-            return new SuccessResource('Successfully logged out');
-
-        } catch (\Exception) {
-            return new FailedResource(500, 'Failed to logout, please try again');
-        }
+        $user->currentAccessToken()->delete();
+        return new SuccessResource('Successfully logged out');
     }
 
     public function login(AuthRequest $request, UserService $userService): UserResource|FailedResource

@@ -16,7 +16,7 @@ class CheckIfVpn
      *
      * @param Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next): JsonResponse|FailedResource
+    public function handle(Request $request, Closure $next): JsonResponse|FailedResource|Response
     {
         //IP address from the user
         //$ipAddress = (new UserService())->getUserIPAddress();
@@ -25,7 +25,13 @@ class CheckIfVpn
         //$ipAddress = '185.214.96.77';
 
         //IP address for testing (non VPN)
-        $ipAddress = '8.8.8.8';
+
+        if(request()->has('ip')) {
+            $ipAddress = request('ip');
+        } else {
+            $ipAddress = '8.8.8.8';
+        }
+
 
         $apiKey = config('services.proxy_check_io_key');
         $apiUrl = config('services.proxy_check_io_api_url');

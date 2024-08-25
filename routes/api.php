@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => [AlwaysAcceptJson::class, CheckIfVpn::class]], function () {
+
+    Route::get('/test', function () {
+       return 'Test Route';
+    });
+
     //Authentication
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
